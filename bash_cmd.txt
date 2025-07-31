@@ -1,0 +1,31 @@
+# create network for containers from different docker-compose files to communicate with each other
+docker network create common-net 
+
+# to view which container belongs to that network
+docker network inspect common-net
+
+# build image if not exists & run container
+docker compose -f docker-compose-kafka.yml -f docker-compose-spark.yml -f docker-compose-dwh-dbt-airflow.yml up -d
+docker compose -f docker-compose-kafka.yml up -d 
+docker compose -f docker-compose-spark.yml up -d 
+docker compose -f docker-compose-dwh-dbt-airflow.yml up -d
+
+# stop & delete container
+docker compose -f docker-compose-kafka.yml -f docker-compose-spark.yml -f docker-compose-dwh-dbt-airflow.yml down
+docker compose -f docker-compose-kafka.yml down 
+docker compose -f docker-compose-spark.yml down 
+docker compose -f docker-compose-dwh-dbt-airflow.yml down
+
+# delete volumne
+docker volume prune -a
+
+# access spark-master container to run scripts from workdir "/opt/spark/app/"
+docker exec -it spark-master bash
+
+# run python scripts for sending messages to kafka
+python send_green.py 
+python send_yellow.py
+
+# submit spark job to receiving messages from kafka and loading to PG_DWH
+spark-submit receive_green.py
+spark-submit receive_yellow.py

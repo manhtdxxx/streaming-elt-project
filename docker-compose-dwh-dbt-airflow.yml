@@ -1,0 +1,52 @@
+services:
+  postgres-dwh:
+    image: postgres:15-alpine
+    container_name: postgres-dwh
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: taxi_dwh
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+      - ./docker/init/raw_schema.sql:/docker-entrypoint-initdb.d/raw_schema.sql:ro # ro = read-only
+    networks:
+      - common-net
+
+  dbt-airflow:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-dbt-airflow
+    container_name: dbt-airflow
+    depends_on:
+      - postgres-dwh
+    restart: unless-stopped
+    environment:
+      # connect to postgres-dwh: AIRFLOW_CONN_<conn_id>=postgresql://<username>:<password>@<host>:<port>/<database>
+      - AIRFLOW_CONN_DWH_CONN=postgresql://postgres:123456@postgres-dwh:5432/taxi_dwh
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    ports:
+      - 8085:8080
+    volumes:
+      - ./src/dbt:/opt/airflow/dags
+      - C:/Users/manh/.dbt:/home/airflow/.dbt # mount .profiles.yml that contains connection config for dbt
+    command: >
+      bash -c "
+      airflow db init &&
+      airflow users create --username airflow --password 123456 --firstname manh --lastname td --role Admin --email tdmanh1510@gmail.com;
+      airflow webserver &
+      exec airflow scheduler
+      "
+    networks:
+      - common-net
+
+volumes:
+  pg-data:
+    name: pg-data
+
+networks:
+  # you have to "docker network create common-net" before start containers
+  common-net: # for containers from different docker-compose to connect to each other
+    external: true

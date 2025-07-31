@@ -1,0 +1,22 @@
+# Ignore everything in the data folder
+data/**
+
+# Except the curl_data.py script
+!data/curl_data.py
+
+# Ignore logs and temp folders
+/src/dbt/logs/
+/src/streaming_scripts/tmp/
+
+# Ignore notebook checkpoints and temporary files
+*.ipynb_checkpoints
+*.log
+*.tmp
+
+# Ignore Spark/dbt metadata
+.metastore_db/
+spark-warehouse/
+
+# Python cache and compiled files
+__pycache__/
+*.pyc

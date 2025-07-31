@@ -1,0 +1,50 @@
+CREATE SCHEMA IF NOT EXISTS raw;
+
+CREATE TABLE IF NOT EXISTS raw.green_taxi (
+    trip_id TEXT,
+    VendorID BIGINT,
+    lpep_pickup_datetime TIMESTAMP,
+    lpep_dropoff_datetime TIMESTAMP,
+    store_and_fwd_flag TEXT,
+    RatecodeID BIGINT,
+    PULocationID BIGINT,
+    DOLocationID BIGINT,
+    passenger_count BIGINT,
+    trip_distance DOUBLE PRECISION,
+    fare_amount DOUBLE PRECISION,
+    extra DOUBLE PRECISION,
+    mta_tax DOUBLE PRECISION,
+    tip_amount DOUBLE PRECISION,
+    tolls_amount DOUBLE PRECISION,
+    ehail_fee DOUBLE PRECISION,
+    improvement_surcharge DOUBLE PRECISION,
+    total_amount DOUBLE PRECISION,
+    payment_type BIGINT,
+    trip_type BIGINT,
+    congestion_surcharge DOUBLE PRECISION,
+    loaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS raw.yellow_taxi (
+    trip_id TEXT,
+    VendorID BIGINT,
+    tpep_pickup_datetime TIMESTAMP,
+    tpep_dropoff_datetime TIMESTAMP,
+    passenger_count BIGINT,
+    trip_distance DOUBLE PRECISION,
+    RatecodeID BIGINT,
+    store_and_fwd_flag TEXT,
+    PULocationID BIGINT,
+    DOLocationID BIGINT,
+    payment_type BIGINT,
+    fare_amount DOUBLE PRECISION,
+    extra DOUBLE PRECISION,
+    mta_tax DOUBLE PRECISION,
+    tip_amount DOUBLE PRECISION,
+    tolls_amount DOUBLE PRECISION,
+    improvement_surcharge DOUBLE PRECISION,
+    total_amount DOUBLE PRECISION,
+    congestion_surcharge DOUBLE PRECISION,
+    Airport_fee DOUBLE PRECISION,
+    loaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -1,0 +1,87 @@
+services:
+  spark-master:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-spark
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_USER=spark
+    ports:
+      - "7077:7077" # port for worker to connect
+      - "8082:8080" # web UI
+    volumes:
+      - ./docker/spark_conf/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
+      - ./docker/spark_conf/log4j.properties:/opt/bitnami/spark/conf/log4j.properties
+      - ./src/streaming_scripts:/opt/spark/app
+      - ./data:/opt/spark/data
+    networks:
+      - spark-net
+      - common-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  spark-worker-1:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-spark
+    container_name: spark-worker-1
+    depends_on:
+      spark-master:
+        condition: service_healthy
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_WEBUI_PORT=8081
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=2
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_USER=spark
+    ports:
+      - "8083:8081"
+    networks:
+      - spark-net
+      - common-net
+
+  spark-worker-2:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-spark
+    container_name: spark-worker-2
+    depends_on:
+      spark-master:
+        condition: service_healthy
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_WEBUI_PORT=8082 # 8081 is used by worker-1
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=2
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_USER=spark
+    ports:
+      - "8084:8082"
+    networks:
+      - spark-net
+      - common-net
+
+networks:
+  spark-net:
+    name: spark-net
+    driver: bridge
+  # you have to "docker network create common-net" before start containers
+  common-net: # for containers from different docker-compose to connect to each other
+    external: true

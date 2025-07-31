@@ -1,0 +1,36 @@
+FROM docker.io/bitnami/spark:3.3.2
+
+USER root
+
+# Install prerequisites
+RUN apt-get update && \
+    apt-get install -y curl python3-pip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+RUN pip3 install --no-cache-dir \
+    numpy==1.24.4 \
+    pandas==1.5.3 \
+    pyarrow==11.0.0 \
+    confluent-kafka==2.5.3 \
+    avro==1.11.3 \
+    requests==2.31.0 \
+    fastavro==1.9.0
+
+# Download required JARs
+WORKDIR /tmp/jars
+
+RUN curl -L -O https://repo1.maven.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/3.3.2/spark-sql-kafka-0-10_2.12-3.3.2.jar && \
+    curl -L -O https://repo1.maven.org/maven2/org/apache/spark/spark-token-provider-kafka-0-10_2.12/3.3.2/spark-token-provider-kafka-0-10_2.12-3.3.2.jar && \
+    curl -L -O https://repo1.maven.org/maven2/org/apache/spark/spark-avro_2.12/3.3.2/spark-avro_2.12-3.3.2.jar && \
+    curl -L -O https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/3.3.2/kafka-clients-3.3.2.jar && \
+    curl -L -O https://repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.11.1/commons-pool2-2.11.1.jar && \
+    curl -L -O https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.4/postgresql-42.7.4.jar && \
+    mv *.jar /opt/bitnami/spark/jars/ && \
+    rm -rf /tmp/jars
+
+
+# Switch back
+WORKDIR /opt/spark/app
+USER 1001
