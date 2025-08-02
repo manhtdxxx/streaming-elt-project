@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: int_both_taxi
+    description: "CTE to union and filter by flag for both green and yellow taxi"
+    columns:
+      - name: passenger_count
+        tests:
+          - positive # > 0 and not null
+      - name: trip_distance
+        tests:
+          - positive
+      - name: fare_amount
+        tests:
+          - positive_or_zero # >= 0 and not null
+      - name: extra
+        tests:
+          - positive_or_zero
+      - name: mta_tax
+        tests:
+          - positive_or_zero
+      - name: tip_amount
+        tests:
+          - positive_or_zero
+      - name: tolls_amount
+        tests:
+          - positive_or_zero
+      - name: improvement_surcharge
+        tests:
+          - positive_or_zero
+      - name: congestion_surcharge
+        tests:
+          - positive_or_zero
+      - name: ehail_fee
+        tests:
+          - positive_or_zero
+      - name: airport_fee
+        tests:
+          - positive_or_zero
+      - name: total_amount
+        tests:
+          - positive_or_zero
+      - name: trip_type
+        tests:
+          - accepted_values:
+              values: [1, 2]
+      - name: taxi_type
+        tests:
+          - accepted_values:
+              values: ["green", "yellow"]
+
+  - name: int_metrics_added
+    description: "CTE to compute metrics for analysis"

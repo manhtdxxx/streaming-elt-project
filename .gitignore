@@ -7,6 +7,7 @@ data/**
 # Ignore logs and temp folders
 /src/dbt/logs/
 /src/streaming_scripts/tmp/
+logs/
 
 # Ignore notebook checkpoints and temporary files
 *.ipynb_checkpoints
@@ -20,3 +21,4 @@ spark-warehouse/
 # Python cache and compiled files
 __pycache__/
 *.pyc
+.vscode/

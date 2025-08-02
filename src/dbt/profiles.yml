@@ -1,0 +1,27 @@
+# this file should be put in C:\Users\your_pc_username\.dbt and it will be automatically mounted to container
+# I put it here just for clarity
+
+nyc_taxi: # profile_name
+  target: dev # default environment to work with
+  outputs:
+    dev: # to run in localhost
+      type: postgres
+      host: localhost
+      user: postgres
+      password: "123456"
+      port: 5432
+      dbname: taxi_dwh
+      schema: raw
+      threads: 1
+      keepalives: true
+
+    prod: # to run in container
+      type: postgres
+      host: postgres-dwh
+      user: postgres
+      password: "123456"
+      port: 5432
+      dbname: taxi_dwh
+      schema: raw
+      threads: 1
+      keepalives: true

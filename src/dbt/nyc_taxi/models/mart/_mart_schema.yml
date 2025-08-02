@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: dim_vendor
+    description: "Dimension table describing vendors for taxi trips."
+
+  - name: dim_trip_type
+    description: "Dimension table describing trip types, e.g., street-hail, dispatch, etc."
+
+  - name: dim_location
+    description: "Dimension table containing pickup and dropoff locations details."
+
+  - name: dim_ratecode
+    description: "Dimension table describing rate codes applied for trips."
+
+  - name: dim_payment
+    description: "Dimension table describing payment types used in taxi trips."
+
+  - name: fact_trip
+    description: "Fact table containing detailed taxi trip records with metrics like duration, fares, and surcharges."
+    columns:
+      - name: pu_location_id
+        tests:
+          - relationships:
+              to: ref('dim_location')
+              field: location_id
+      - name: do_location_id
+        tests:
+          - relationships:
+              to: ref('dim_location')
+              field: location_id
+      - name: vendor_id
+        tests:
+          - relationships:
+              to: ref('dim_vendor')
+              field: vendor_id
+      - name: payment_id
+        tests:
+          - relationships:
+              to: ref('dim_payment')
+              field: payment_id
+      - name: ratecode_id
+        tests:
+          - relationships:
+              to: ref('dim_ratecode')
+              field: ratecode_id
+      - name: trip_type_id
+        tests:
+          - relationships:
+              to: ref('dim_trip_type')
+              field: trip_type_id

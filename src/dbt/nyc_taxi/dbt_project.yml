@@ -31,10 +31,11 @@ models:
   nyc_taxi:
     # Config indicated by + and applies to all files under models/example/
     staging:
-      +materialized: view
-      +schema: raw
+      +materialized: incremental
+      +schema: staging
     intermediate:
-      +materialized: ephemeral
+      +materialized: incremental
+      +schema: intermediate
     mart:
-      +materialized: table
+      +materialized: incremental
       +schema: mart

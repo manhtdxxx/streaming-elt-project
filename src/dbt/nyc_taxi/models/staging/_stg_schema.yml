@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: stg_green_taxi
+    description: "taxi_dwh.staging.stg_green_taxi"
+    tests:
+      - dropoff_after_pickup
+    columns: &common_taxi_tests # define an anchor to reuse
+      - name: trip_id
+        tests:
+          - not_null
+          - unique
+      - name: vendor_id
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2]
+      - name: pickup_datetime
+        tests:
+          - not_null
+      - name: dropoff_datetime
+        tests:
+          - not_null
+      - name: pu_location_id
+        tests:
+          - not_null
+      - name: do_location_id
+        tests:
+          - not_null
+      - name: ratecode_id_clean
+        tests:
+          - not_null
+          - accepted_values:
+              values: [-1, 1, 2, 3, 4, 5, 6]
+      - name: payment_id_clean
+        tests:
+          - not_null
+          - accepted_values:
+              values: [-1, 1, 2, 3, 4, 5, 6]
+      - name: loaded_at
+        tests:
+          - not_null
+
+  - name: stg_yellow_taxi
+    description: "taxi_dwh.staging.stg_yellow_taxi"
+    tests:
+      - dropoff_after_pickup
+    columns: *common_taxi_tests # reuse anchor above
