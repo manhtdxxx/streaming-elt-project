@@ -112,5 +112,5 @@ docker-compose -f docker-compose-dwh-dbt-airflow.yml up -d
 
 ### Step 4: Orchestrate with Airflow
 - Open the Airflow Web UI in your browser
-- In the list of DAGs, locate the DAG **dbt_run_and_test** and toggle On/Off if it is not already enabled.
+- In the list of DAGs, locate the DAG **dbt_run_and_test** and toggle On to enable dbt to run every 1 minute
 ![Airflow UI](readme/airflow-dag.png)
