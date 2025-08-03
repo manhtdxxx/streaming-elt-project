@@ -19,7 +19,7 @@ docker compose -f docker-compose-dwh-dbt-airflow.yml down
 # delete volumne
 docker volume prune -a
 
-# access spark-master container to run scripts from workdir "/opt/spark/app/"
+# access spark-master container to run python/spark scripts from workdir "/opt/spark/app/"
 docker exec -it spark-master bash
 
 # run python scripts for sending messages to kafka
@@ -29,3 +29,10 @@ python send_yellow.py
 # submit spark job to receiving messages from kafka and loading to PG_DWH
 spark-submit receive_green.py
 spark-submit receive_yellow.py
+
+# access dbt-airflow container to run dbt scripts from workdir "/opt/airflow/"
+docker exec -it dbt-airflow bash
+cd dags/
+cd nyc_taxi/
+dbt run --target prod
+dbt test --target prod
