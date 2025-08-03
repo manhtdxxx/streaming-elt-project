@@ -21,7 +21,16 @@ Since the only available data source is a Parquet file (with no direct database 
 
 ---
 
-# 📂 3. Project Structure
+# 🚧 3. Data Modeling
+Below is the dbt model lineage illustrating the flow of transformations:
+![dbt Lineage](readme/dbt-lineage.png)
+
+And here is the star schema design used in the data warehouse to support analytical queries:
+![Star Schema](readme/star-schema.png)
+
+---
+
+# 📂 4. Project Structure
 ```text
 streaming-elt-project/
 │
@@ -48,15 +57,6 @@ streaming-elt-project/
 ├── docker-compose-kafka.yml             # Compose file for Kafka cluster, Schema Registry, and Kafka UI
 ├── docker-compose-spark.yml             # Compose file for Spark cluster
 ```
-
----
-
-# 🚧 4. Data Modeling
-Below is the dbt model lineage illustrating the flow of transformations:
-![dbt Lineage](readme/dbt-lineage.png)
-
-And here is the star schema design used in the data warehouse to support analytical queries:
-![Star Schema](readme/star-schema.png)
 
 ---
 
