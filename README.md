@@ -62,3 +62,28 @@ streaming-elt-project/
 ---
 
 # 🚀 5. Setup
+## 5.1 Prerequisites  
+Before starting, please ensure you have:  
+- Docker Desktop installed and running on your machine.  
+
+## 5.2 Start Services  
+Start the required services in the following order by running these commands in your terminal:
+
+```bash
+docker network create common-net
+docker-compose -f docker-compose-kafka.yml up -d
+docker-compose -f docker-compose-spark.yml up -d
+docker-compose -f docker-compose-dwh-dbt-airflow.yml up -d
+```
+## 5.3 Accessing Services
+- `Kafka UI`: http://localhost:8080
+- `Spark Master UI`: http://localhost:8082
+- `Spark Worker 1 UI`: http://localhost:8083
+- `Spark Worker 2 UI`: http://localhost:8084
+- `Airflow Webserver`: http://localhost:8085
+- `Postgres DWH` is accessible on port 5432 with credentials:
+  - User: postgres
+  - Password: 123456
+  - Database: taxi_dwh
+
+## 5.4. Running the Pipeline
