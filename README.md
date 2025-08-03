@@ -1,13 +1,13 @@
 # 📌 1. Introduction
-- This project showcases a **near-real-time ELT (Extract, Load, Transform) pipeline** built entirely with open-source tools.
+This project showcases a **near-real-time ELT (Extract, Load, Transform) pipeline** built entirely with open-source tools.
 
-- The source data comes from the [NYC Taxi & Limousine Commission (TLC) Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page), provided as Parquet files.
+The source data comes from the [NYC Taxi & Limousine Commission (TLC) Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page), provided as Parquet files.
 
-- Key components include:  
-  - `Ingestion:` A Python producer reads the Parquet data line-by-line and streams it to a **Kafka** topic to simulate real-time data flow.  
-  - `Loading:` **Spark Structured Streaming** consumes data from Kafka, applies lightweight processing, and loads it into a **DWH**.  
-  - `Transformation:` **dbt** is used to transform and model the raw data across multiple layers: `raw → staging → intermediate → mart`.
-  - `Orchestration:` **Airflow** manages and schedules the entire transformation workflow to ensure reliability and automation.  
+Key components include:  
+- `Ingestion:` A Python producer reads the Parquet data line-by-line and streams it to a **Kafka** topic to simulate real-time data flow.  
+- `Loading:` **Spark Structured Streaming** consumes data from Kafka, applies lightweight processing, and loads it into a **DWH**.  
+- `Transformation:` **dbt** is used to transform and model the raw data across multiple layers: `raw → staging → intermediate → mart`.
+- `Orchestration:` **Airflow** manages and schedules the entire transformation workflow to ensure reliability and automation.  
 
 ---
 
