@@ -48,6 +48,7 @@ streaming-elt-project/
 │       │   │   └── staging                  - clean and standardize raw source data
 │       │   │   └── intermediate             - join, enrich, and aggregate staging data
 │       │   │   └── mart                     - business-ready tables for analytics & BI
+│       │   │   └── ...   
 │       │   ├── dbt_project.yml            # dbt project configuration
 │       │   └── packages.yml               # dbt dependencies
 │       ├── profiles.yml                 # Database connection settings for dbt
