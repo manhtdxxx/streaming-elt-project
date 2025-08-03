@@ -78,15 +78,21 @@ Before starting, please ensure you have:
 - VS Code installed to open project on your local machine
 
 ## 5.2 Project Setup & Initialization
-1. Clone the project repository to your local machine: `git clone https://github.com/manhtdxxx/streaming-elt-project.git`
-2. Start the required services in the following order by running these commands in your terminal:
+1. Clone the project repository to your local machine:
+```bash
+git clone https://github.com/manhtdxxx/streaming-elt-project.git
+```
+3. Start the required services in the following order by running these commands in your terminal:
 ```bash
 docker network create common-net
 docker-compose -f docker-compose-kafka.yml up -d
 docker-compose -f docker-compose-spark.yml up -d
 docker-compose -f docker-compose-dwh-dbt-airflow.yml up -d
 ```
-3. Fetch data file from the web: `python data/curl_data.py`
+3. Fetch data file from the web:
+```bash
+python data/curl_data.py
+```
    
 ## 5.3 Service Access Information
 - `Kafka UI`: http://localhost:8080
