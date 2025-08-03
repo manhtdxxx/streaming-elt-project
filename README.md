@@ -1,3 +1,19 @@
+# 📑 Table of Contents
+
+- [📌 1. Introduction](#-1-introduction)
+- [🏗 2. Architecture](#-2-architecture)
+  - [2.1 Original Pipeline](#21-original-pipeline)
+  - [2.2 Alternative Pipeline](#22-alternative-pipeline)
+- [🚧 3. Data Modeling](#-3-data-modeling)
+- [📂 4. Project Structure](#-4-project-structure)
+- [🚀 5. Setup](#-5-setup)
+  - [5.1 Prerequisites](#51-prerequisites)
+  - [5.2 Start Services](#52-start-services)
+  - [5.3 Accessing Services](#53-accessing-services)
+  - [5.4 Running the Pipeline](#54-running-the-pipeline)
+
+---
+
 # 📌 1. Introduction
 This project showcases a **near-real-time ELT (Extract, Load, Transform) pipeline** built entirely with open-source tools.
 
