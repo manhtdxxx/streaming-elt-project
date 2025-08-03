@@ -6,7 +6,7 @@ The source data comes from the [NYC Taxi & Limousine Commission (TLC) Trip Recor
 Key components include:  
 - `Ingestion:` A Python producer reads the Parquet data line-by-line and streams it to a **Kafka** topic to simulate real-time data flow.  
 - `Loading:` **Spark Structured Streaming** consumes data from Kafka, applies lightweight processing, and loads it into a **DWH**.  
-- `Transformation:` **dbt** is used to transform and model the raw data across multiple layers: `raw → staging → intermediate → mart`.
+- `Transformation:` **dbt** is used to transform and model the raw data across multiple layers: raw → staging → intermediate → mart.
 - `Orchestration:` **Airflow** manages and schedules the entire transformation workflow to ensure reliability and automation.  
 
 ---
