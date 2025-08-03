@@ -4,10 +4,10 @@ This project showcases a **near-real-time ELT (Extract, Load, Transform) pipelin
 The source data comes from the [NYC Taxi & Limousine Commission (TLC) Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page), provided as Parquet files.
 
 Key components include:  
-- `Ingestion:` A Python producer reads the Parquet data line-by-line and streams it to a **Kafka** topic to simulate real-time data flow.  
-- `Loading:` **Spark Structured Streaming** consumes data from Kafka, applies lightweight processing, and loads it into a **DWH**.  
-- `Transformation:` **dbt** is used to transform and model the raw data across multiple layers: raw → staging → intermediate → mart.
-- `Orchestration:` **Airflow** manages and schedules the entire transformation workflow to ensure reliability and automation.  
+- `Ingestion`: A Python producer reads the Parquet data line-by-line and streams it to a **Kafka** topic to simulate real-time data flow.  
+- `Loading`: **Spark Structured Streaming** consumes data from Kafka, applies lightweight processing, and loads it into a **DWH**.  
+- `Transformation`: **dbt** is used to transform and model the raw data across multiple layers: raw → staging → intermediate → mart.
+- `Orchestration`: **Airflow** manages and schedules the entire transformation workflow to ensure reliability and automation.  
 
 ---
 
@@ -80,10 +80,37 @@ docker-compose -f docker-compose-dwh-dbt-airflow.yml up -d
 - `Spark Master UI`: http://localhost:8082
 - `Spark Worker 1 UI`: http://localhost:8083
 - `Spark Worker 2 UI`: http://localhost:8084
-- `Airflow Webserver`: http://localhost:8085
+- `Airflow Webserver` is accessible at http://localhost:8085 with credentials:
+  - Username: airflow
+  - Password: 123456
 - `Postgres DWH` is accessible on port 5432 with credentials:
   - User: postgres
   - Password: 123456
   - Database: taxi_dwh
 
 ## 5.4. Running the Pipeline
+### Step 1: Send Data to Kafka (Simulate Streaming)
+- Access the spark-master container: `docker exec -it spark-master bash`
+- Navigate to the working directory `/opt/spark/app/`, then execute the following scripts to simulate streaming by sending line by line from Parquet file to Kafka topics:
+  - `python send_green.py`
+  - `python send_yellow.py`
+- To monitor the streaming data and check the messages sent to Kafka topics, open the Kafka UI:
+![Kafka UI](readme/kafka-ui.png)
+
+### Step 2: Consume Data from Kafka
+- Access the spark-master container: `docker exec -it spark-master bash`
+- From the working directory `/opt/spark/app/`, submit the Spark jobs that will consume data from Kafka, perform processing, and load the results into the Data Warehouse:
+  - `spark-submit receive_green.py`
+  - `spark-submit receive_yellow.py`
+- To monitor Spark cluster health, job progress, and resource usage, access the Spark Web UI at the address provided in the setup section.
+
+### Step 3: Transform Data in DWH
+- Access the dbt-airflow container: `docker exec -it dbt-airflow bash`
+- From the working directory `/opt/airflow/`, navigate to the dbt project: `cd dags/nyc_taxi/`
+- Run dbt models to transform the data: `dbt run --target prod`
+- Run dbt tests to validate data quality: `dbt test --target prod`
+
+### Step 4: Orchestrate with Airflow
+- Open the Airflow Web UI in your browser
+- In the list of DAGs, locate the DAG **dbt_run_and_test** and toggle On/Off if it is not already enabled.
+![Airflow UI](readme/airflow-dag.png)
